@@ -1,87 +1,56 @@
-<script setup>
-import HelloWorld from "./components/HelloWorld.vue";
-import TheWelcome from "./components/TheWelcome.vue";
-</script>
-
 <template>
-  <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="./assets/logo.svg"
-      width="125"
-      height="125"
-    />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <section>
+    <GfFilter />
+    <GfList v-if="records" />
+    <p v-else-if="error" class="error">
+      Geen resultaten gevonden...<br />(● ︵ ●)
+    </p>
+  </section>
 </template>
-
-<style>
+<script>
+import GfFilter from "./components/organisms/GfFilter.vue";
+import GfList from "./components/organisms/GfList.vue";
+export default {
+  components: { GfList, GfFilter },
+  // define methods under the `methods` object
+  methods: {
+    fetchData: function () {
+      fetch(this.url)
+        .then((res) => res.json())
+        .then((nhits, records) => {
+          nhits = nhits;
+          records = records;
+          console.log(nhits);
+        })
+        .catch(/* ...this.error ...*/);
+    },
+  },
+  computed: {
+    // a computed getter
+    url() {
+      let url = "https://data.stad.gent/api/records/1.0/search/?";
+      url += "dataset=gentse-feesten-evenementen-2019";
+      url += "&sort=-startdate";
+      return encodeURI(url);
+    },
+  },
+  props: {
+    text: {
+      type: String,
+    },
+    nhits: {},
+    records: {},
+    error: {
+      type: String,
+      default: "er is een error",
+    },
+  },
+  mounted() {
+    console.log("Retrieving the first data...");
+    this.fetchData();
+  },
+};
+</script>
+<style lang="scss">
 @import "./assets/base.css";
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
-  font-weight: normal;
-}
-
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
-
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-}
 </style>
