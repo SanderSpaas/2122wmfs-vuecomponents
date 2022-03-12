@@ -1,9 +1,9 @@
 <template>
   <section>
     <GfFilter />
-    <GfList v-if="records" />
+    <GfList :records="records" v-if="nhits > 0" />
     <p v-else-if="error" class="error">
-      Geen resultaten gevonden...<br />(● ︵ ●)
+      Geen resultaten gevonden... <br />(● ︵ ●)
     </p>
   </section>
 </template>
@@ -14,15 +14,14 @@ export default {
   components: { GfList, GfFilter },
   // define methods under the `methods` object
   methods: {
-    fetchData: function () {
+    fetchData() {
       fetch(this.url)
         .then((res) => res.json())
-        .then((nhits, records) => {
-          nhits = nhits;
-          records = records;
-          console.log(nhits);
+        .then((data) => {
+          this.records = data.records;
+          this.nhits = data.nhits;
         })
-        .catch(/* ...this.error ...*/);
+        .catch((error) => (this.error = error));
     },
   },
   computed: {
@@ -34,16 +33,24 @@ export default {
       return encodeURI(url);
     },
   },
-  props: {
-    text: {
-      type: String,
-    },
-    nhits: {},
-    records: {},
-    error: {
-      type: String,
-      default: "er is een error",
-    },
+  // props: {
+  //   text: {
+  //     type: String,
+  //   },
+  //   nhits: {},
+  //   records: { type: Array, required: true },
+  //   error: {
+  //     type: String,
+  //     default: "er is een error",
+  //   },
+  // },
+  data() {
+    return {
+      nhits: null,
+      records: null,
+      parameters: null,
+      error: "er is een error",
+    };
   },
   mounted() {
     console.log("Retrieving the first data...");
