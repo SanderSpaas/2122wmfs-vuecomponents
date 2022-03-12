@@ -25,7 +25,7 @@ export default {
     },
     filter(q) {
       this.q = q;
-      console.log(q);
+      // console.log(q);
       this.fetchData();
     },
   },
