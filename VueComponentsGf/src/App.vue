@@ -1,6 +1,6 @@
 <template>
   <section>
-    <GfFilter />
+    <GfFilter @filter="filter" />
     <GfList :records="records" v-if="nhits > 0" />
     <p v-else-if="error" class="error">
       Geen resultaten gevonden... <br />(● ︵ ●)
@@ -23,6 +23,11 @@ export default {
         })
         .catch((error) => (this.error = error));
     },
+    filter(q) {
+      this.q = q;
+      console.log(q);
+      this.fetchData();
+    },
   },
   computed: {
     // a computed getter
@@ -30,6 +35,7 @@ export default {
       let url = "https://data.stad.gent/api/records/1.0/search/?";
       url += "dataset=gentse-feesten-evenementen-2019";
       url += "&sort=-startdate";
+      url += "&q=" + this.q;
       return encodeURI(url);
     },
   },
@@ -48,7 +54,7 @@ export default {
     return {
       nhits: null,
       records: null,
-      parameters: null,
+      q: "",
       error: "er is een error",
     };
   },

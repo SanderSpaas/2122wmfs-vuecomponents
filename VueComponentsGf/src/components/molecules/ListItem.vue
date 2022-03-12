@@ -6,7 +6,7 @@
 </template>
 <script>
 export default {
-  props: { event: { type: Array, required: true } },
+  props: { event: { type: Object, required: true } },
   default: {},
 };
 </script>
