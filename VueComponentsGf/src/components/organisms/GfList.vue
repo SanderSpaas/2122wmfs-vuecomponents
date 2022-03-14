@@ -14,8 +14,7 @@ export default {
 </script>
 <style scoped lang="scss">
 @import "../../assets/mixins.scss";
-$Basewhite: rgb(219, 219, 219);
-$BasewhiteDarker: rgba($Basewhite, 0.88);
+@import "../../assets/colors.scss";
 ul {
   list-style-type: none;
   display: flex;

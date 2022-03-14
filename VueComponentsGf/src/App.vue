@@ -1,9 +1,10 @@
 <template>
   <section>
-    <GfFilter @filter="filter" />
+    <h1>Gentse Feesten</h1>
+    <GfFilter :query="q" @filter="filter" />
     <GfList :records="records" v-if="nhits > 0" />
     <p v-else-if="error" class="error">
-      Geen resultaten gevonden... <br />(● ︵ ●)
+      {{ error }}
     </p>
     <GfPagination
       :modelValue="start"
@@ -20,11 +21,16 @@ export default {
   components: { GfList, GfFilter, GfPagination },
   methods: {
     fetchData() {
-      fetch(this.url)
+      fetch(this.url, {
+        headers: {
+          Authorization: `apikey ${import.meta.env.VITE_API_KEY}`,
+        },
+      })
         .then((res) => res.json())
         .then((data) => {
           this.records = data.records;
           this.nhits = data.nhits;
+          this.setURLSearchParams();
         })
         .catch((error) => (this.error = error));
     },
@@ -38,6 +44,17 @@ export default {
       this.start = this.start + start;
       // console.log(this.start);
       // this.fetchData();
+    },
+    setURLSearchParams() {
+      let searchParams = new URLSearchParams();
+      if (this.q) {
+        searchParams.set("q", this.q);
+      }
+      if (this.start) {
+        searchParams.set("start", this.start);
+      }
+      window.history.pushState({}, "", searchParams);
+      console.log(searchParams.toString());
     },
   },
   computed: {
@@ -54,9 +71,11 @@ export default {
     return {
       nhits: null,
       records: null,
+      // searchParams: new URLSearchParams(),
       q: "",
-      error: "er is een error",
+      error: "Geen resultaten gevonden... (● ︵ ●)",
       start: 0,
+      params: "",
     };
   },
   watch: {
@@ -67,6 +86,15 @@ export default {
     },
   },
   mounted() {
+    const url = new URL(location);
+    console.log(url.toString());
+    let searchParams = new URLSearchParams(url.search);
+    if (searchParams.has("q")) {
+      this.q = searchParams.get("q");
+    }
+    if (searchParams.has("start")) {
+      this.start = searchParams.get("start");
+    }
     console.log("Retrieving the first data...");
     this.fetchData();
   },
@@ -74,4 +102,12 @@ export default {
 </script>
 <style lang="scss">
 @import "./assets/base.css";
+@import "./assets/colors.scss";
+h1 {
+  text-align: center;
+  font-weight: bolder;
+  font-size: 5em;
+  color: $Basewhite;
+  padding: 0.5em;
+}
 </style>

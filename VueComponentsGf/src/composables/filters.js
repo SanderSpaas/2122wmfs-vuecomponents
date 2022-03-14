@@ -38,12 +38,12 @@ export function useFilters() {
   };
 
   const ellipsis = function (value, end = 150) {
-    if (value) {
+    if (!value) {
       return "...";
     } else if (value < end) {
       return value;
-    } else if (value > end) {
-      return value.Substring(0, end) + "...";
+    } else if (value.length > end) {
+      return value.substring(0, end) + "...";
     }
     /*
     indien geen value --> return "…"

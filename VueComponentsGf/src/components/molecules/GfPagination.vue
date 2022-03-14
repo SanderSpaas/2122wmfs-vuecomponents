@@ -25,15 +25,11 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-$Basewhite: rgb(219, 219, 219);
-$BasewhiteDarker: rgba($Basewhite, 0.88);
-$darkBlack: rgb(31, 31, 31);
-$darkBlackDarker: rgb($darkBlack, 10);
+@import "../../assets/colors.scss";
 .pagination {
   display: flex;
   align-items: baseline;
   justify-content: center;
-  padding-left: 25%;
   padding: 0.6em;
 }
 button {
@@ -51,6 +47,7 @@ button:disabled {
   border: solid 1px $darkBlackDarker;
   color: $darkBlackDarker;
   background-color: $BasewhiteDarker;
+  text-decoration: line-through;
 }
 p {
   color: $Basewhite;
