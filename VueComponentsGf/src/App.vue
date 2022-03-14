@@ -37,7 +37,6 @@ export default {
     filter(q) {
       this.q = q;
       this.start = 0;
-      // console.log(q);
       this.fetchData();
     },
     modelValue(start) {
@@ -46,15 +45,11 @@ export default {
       // this.fetchData();
     },
     setURLSearchParams() {
-      let searchParams = new URLSearchParams();
-      if (this.q) {
-        searchParams.set("q", this.q);
-      }
-      if (this.start) {
-        searchParams.set("start", this.start);
-      }
-      window.history.pushState({}, "", searchParams);
-      console.log(searchParams.toString());
+      let searchParams = new URLSearchParams(
+        "q=" + this.q + "&start=" + this.start
+      );
+      window.history.pushState({}, "", "?" + searchParams);
+      return searchParams;
     },
   },
   computed: {
@@ -86,15 +81,10 @@ export default {
     },
   },
   mounted() {
-    const url = new URL(location);
-    console.log(url.toString());
-    let searchParams = new URLSearchParams(url.search);
-    if (searchParams.has("q")) {
-      this.q = searchParams.get("q");
-    }
-    if (searchParams.has("start")) {
-      this.start = searchParams.get("start");
-    }
+    let searchParams = new URLSearchParams(location.search);
+    if (searchParams.has("q")) this.q = searchParams.get("q");
+    if (searchParams.has("start")) this.start = searchParams.get("start");
+
     console.log("Retrieving the first data...");
     this.fetchData();
   },
