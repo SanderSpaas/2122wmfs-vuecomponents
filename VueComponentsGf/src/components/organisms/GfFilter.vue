@@ -105,9 +105,14 @@ export default {
 <style scoped lang="scss">
 @import "../../assets/mixins.scss";
 @import "../../assets/colors.scss";
-form {
-  display: flex;
-  justify-content: space-around;
+$padding: 25em;
+div{
+display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+  padding-left: $padding;
+  padding-right: $padding;
 }
 input[type="radio"] {
   // mixin toepassen
@@ -115,7 +120,9 @@ input[type="radio"] {
   + label {
     // labels stylen
     font-weight: bolder;
+    text-align: center;
     padding: 2em;
+    width: 20%;
     color: $Basewhite;
     background-color: $darkBlack;
     border: solid 1px white;
